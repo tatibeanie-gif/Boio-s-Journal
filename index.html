@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Boio's Journal</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20260725-2">
 </head>
 <body>
   <div class="text-block">
@@ -73,7 +76,7 @@
 
     noteHotspots.forEach((button) => {
       button.type = 'button';
-      button.addEventListener('click', (e) => {
+      const showNote = (e) => {
         e.stopPropagation();
         const rect = button.getBoundingClientRect();
         const popupWidth = 260;
@@ -85,7 +88,10 @@
         notePopup.style.left = `${left}px`;
         notePopup.style.top = `${top}px`;
         notePopup.style.display = 'block';
-      });
+      };
+
+      button.addEventListener('click', showNote);
+      button.addEventListener('pointerdown', showNote);
     });
 
     document.addEventListener('click', () => {
