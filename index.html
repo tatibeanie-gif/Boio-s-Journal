@@ -10,16 +10,28 @@
     <p>It's your turn to explore his notes, don't hesitate to zoom, click, and maybe discover some surprises!</p>
   </div>
 
-  <img class="draggable-image" id="monImage" src="images/intronotes.png" style="left: 50px; top: 50px;">
-  <img class="draggable-image" id="introArt" src="images/introart.png" style="left: 260px; top: 50px;">
+  <div class="image-stage" id="stage1" style="left: 50px; top: 50px;">
+    <img class="draggable-image" id="monImage" src="images/intronotes.png">
+    <button class="note-hotspot" data-note="Boio is an old forest druid, sent on a mission to gather as much information as possible about the human realm." style="left: 150px; top: 120px;"></button>
+  </div>
+
+  <div class="image-stage" id="stage2" style="left: 260px; top: 50px;">
+    <img class="draggable-image" id="introArt" src="images/introart.png">
+    <button class="note-hotspot" data-note="Boio never figured out who Tatiana was and why her name was on his book. But he decided to not erase it, afraid he would be cursed" style="left: 80px; top: 350px;"></button>
+  </div>
+
+  <div id="notePopup" class="note-popup">A mysterious note appears here...</div>
 
   <audio id="customMusic" loop></audio>
   <audio id="paperSound"></audio>
 
   <script>
     const images = document.querySelectorAll('.draggable-image');
+    const stages = document.querySelectorAll('.image-stage');
     const customMusic = document.getElementById('customMusic');
     const paperSound = document.getElementById('paperSound');
+    const notePopup = document.getElementById('notePopup');
+    const noteHotspots = document.querySelectorAll('.note-hotspot');
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
     let ambientStarted = false;
@@ -59,12 +71,27 @@
       paperSound.play().catch(() => {});
     }
 
+    noteHotspots.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        notePopup.textContent = button.getAttribute('data-note');
+        notePopup.style.left = `${e.clientX + 10}px`;
+        notePopup.style.top = `${e.clientY + 10}px`;
+        notePopup.style.display = 'block';
+      });
+    });
+
+    document.addEventListener('click', () => {
+      notePopup.style.display = 'none';
+    });
+
     document.addEventListener('click', startAudio, { once: true });
     document.addEventListener('wheel', startAudio, { once: true });
     document.addEventListener('touchstart', startAudio, { once: true });
 
-    images.forEach((img) => {
-      img.style.position = 'absolute';
+    stages.forEach((stage) => {
+      const img = stage.querySelector('img');
+      img.style.position = 'relative';
       img.style.cursor = 'move';
       img.style.userSelect = 'none';
       img.ondragstart = () => false;
@@ -78,7 +105,7 @@
         const zoomFactor = 0.1;
         scale += e.deltaY < 0 ? zoomFactor : -zoomFactor;
         scale = Math.max(0.7, Math.min(2.5, scale));
-        img.style.transform = `scale(${scale})`;
+        stage.style.transform = `scale(${scale})`;
       };
 
       img.onmousedown = function (e) {
@@ -86,12 +113,12 @@
         startAudio();
         playPaperSound();
 
-        const shiftX = e.clientX - img.getBoundingClientRect().left;
-        const shiftY = e.clientY - img.getBoundingClientRect().top;
+        const shiftX = e.clientX - stage.getBoundingClientRect().left;
+        const shiftY = e.clientY - stage.getBoundingClientRect().top;
 
         function moveAt(clientX, clientY) {
-          img.style.left = clientX - shiftX + 'px';
-          img.style.top = clientY - shiftY + 'px';
+          stage.style.left = clientX - shiftX + 'px';
+          stage.style.top = clientY - shiftY + 'px';
         }
 
         moveAt(e.clientX, e.clientY);
