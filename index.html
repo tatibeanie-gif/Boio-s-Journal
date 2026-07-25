@@ -72,11 +72,18 @@
     }
 
     noteHotspots.forEach((button) => {
+      button.type = 'button';
       button.addEventListener('click', (e) => {
         e.stopPropagation();
+        const rect = button.getBoundingClientRect();
+        const popupWidth = 260;
+        const popupHeight = 90;
+        const left = Math.min(window.innerWidth - popupWidth - 12, rect.left + 18);
+        const top = Math.min(window.innerHeight - popupHeight - 12, rect.top + 18);
+
         notePopup.textContent = button.getAttribute('data-note');
-        notePopup.style.left = `${e.clientX + 10}px`;
-        notePopup.style.top = `${e.clientY + 10}px`;
+        notePopup.style.left = `${left}px`;
+        notePopup.style.top = `${top}px`;
         notePopup.style.display = 'block';
       });
     });
