@@ -41,7 +41,7 @@ body {
 }
 
 .note-popup {
-    position: fixed;
+    position: absolute;
     display: none;
     max-width: 260px;
     padding: 12px 14px;

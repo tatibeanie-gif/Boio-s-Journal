@@ -78,16 +78,19 @@
       button.type = 'button';
       const showNote = (e) => {
         e.stopPropagation();
+        const stage = button.closest('.image-stage');
         const rect = button.getBoundingClientRect();
+        const stageRect = stage.getBoundingClientRect();
         const popupWidth = 260;
         const popupHeight = 90;
-        const left = Math.min(window.innerWidth - popupWidth - 12, Math.max(12, rect.left + rect.width / 2 - popupWidth / 2));
-        const top = Math.min(window.innerHeight - popupHeight - 12, Math.max(12, rect.top + rect.height / 2 - popupHeight / 2));
+        const left = Math.min(stageRect.width - popupWidth - 12, Math.max(12, rect.left - stageRect.left + 18));
+        const top = Math.min(stageRect.height - popupHeight - 12, Math.max(12, rect.top - stageRect.top + 18));
 
         notePopup.textContent = button.getAttribute('data-note');
         notePopup.style.left = `${left}px`;
         notePopup.style.top = `${top}px`;
         notePopup.style.display = 'block';
+        stage.appendChild(notePopup);
       };
 
       button.addEventListener('click', showNote);
