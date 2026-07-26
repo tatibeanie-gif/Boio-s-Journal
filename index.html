@@ -81,8 +81,8 @@
         const rect = button.getBoundingClientRect();
         const popupWidth = 260;
         const popupHeight = 90;
-        const left = Math.min(window.innerWidth - popupWidth - 12, rect.left + 18);
-        const top = Math.min(window.innerHeight - popupHeight - 12, rect.top + 18);
+        const left = Math.min(window.innerWidth - popupWidth - 12, Math.max(12, rect.left + rect.width / 2 - popupWidth / 2));
+        const top = Math.min(window.innerHeight - popupHeight - 12, Math.max(12, rect.top + rect.height / 2 - popupHeight / 2));
 
         notePopup.textContent = button.getAttribute('data-note');
         notePopup.style.left = `${left}px`;
